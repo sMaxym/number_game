@@ -1,6 +1,7 @@
 import primeNumber
 import happyNumbers
 
+
 def distance(origin, related):
     '''
     (tuple, tuple) -> number
@@ -12,20 +13,21 @@ def distance(origin, related):
     >>> distance((1, 1.5),(9.1, 3.3332))
     8.304855341304869
     '''
-    return ((origin[0] - related[0]) ** 2 + \
-                (origin[1] - related[1]) ** 2) ** 0.5 
+    return ((origin[0] - related[0]) ** 2 + (origin[1] -
+            related[1]) ** 2) ** 0.5
+
 
 def typesProfitEstimation(coordinates, radiuses, values):
     '''
     (list, dictionary, dictionary) -> dictionary
-    Return a dictionary of Type estimations for each point 
+    Return a dictionary of Type estimations for each point
     by its given coordinates, radiuses and values of the points.
     '''
 
     def calcEstimation(primes, happies):
         '''
         (integer, integer) -> number
-        Return profitability estimation of a given point by 
+        Return profitability estimation of a given point by
         its amount of prime and happy neighbors.
         >>> calcEstimation(0, 0)
         0.0
@@ -34,7 +36,7 @@ def typesProfitEstimation(coordinates, radiuses, values):
         >>> calcEstimation(0, 5)
         5.0
         '''
-        return ( (primes + happies) ** 2 + (primes * happies) ** 2) ** 0.5
+        return ((primes + happies) ** 2 + (primes * happies) ** 2) ** 0.5
 
     estimations = {}
     for origin in coordinates:
@@ -50,11 +52,13 @@ def typesProfitEstimation(coordinates, radiuses, values):
         estimations[origin] = estimation
     return estimations
 
+
 if __name__ == '__main__':
-    a = [(2,2),(5,1),(5,3),(1.1, 1.6),(3,1)]
-    b = {(2,2) : 2,(5,1) : 2,(5,3) : 2,(1.1, 1.6) : 2,(3,1) : 2}
-    c = {(2,2) : 2,(5,1) : 5,(5,3) : 7,(1.1, 1.6) : 8,(3,1) : 13}
+    a = [(2, 2), (5, 1), (5, 3), (1.1, 1.6), (3, 1)]
+    b = {(2, 2): 2, (5, 1): 2, (5, 3): 2, (1.1, 1.6): 2, (3, 1): 2}
+    c = {(2, 2): 2, (5, 1): 5, (5, 3): 7, (1.1, 1.6): 8, (3, 1): 13}
     res = typesProfitEstimation(a, b, c)
-    print('#' * 10)
+    print('\n' + '#' * 30)
     for i in res:
         print(c[i], i, res[i])
+    print('#' * 30)
