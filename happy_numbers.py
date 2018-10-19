@@ -20,6 +20,3 @@ def happy_numbers(number):
         elif sum_of_squares >= 10:
             number = sum_of_squares
         
-for num in range(5000):
-    if happy_numbers(num):
-        print(num, end = ", ")
