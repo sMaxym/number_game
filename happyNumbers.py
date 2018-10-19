@@ -1,5 +1,15 @@
 def happyNumbers(number):
-    if number < 0:
+    '''
+    int -> boolean
+    Сheck if number is happy or not
+    >>> happyNumbers(7)
+    True
+    >>> happyNumbers(-8)
+    False
+    >>> happyNumbers(96)
+    False
+    '''
+    if number <= 0:
         return False
     if (number == 1) or (number == 7):
         return True
@@ -19,7 +29,7 @@ def happyNumbers(number):
             return False 
         elif sumOfSquares >= 10:
             number = sumOfSquares
-        
-for num in range(1000000):
+# Loop for generation happy numbers                    
+for num in range(100):
     if happyNumbers(num):
         print(num, end = ", ")
