@@ -18,3 +18,8 @@ Level 7:
 Uranus, this is the final stop of people, further their technologies do not let fly. This object is the last planet that can be colonized. Bases are located, lids and equipment are ready. You started the capture of the craters!
 Epilogue:
 You did this, with the help of space and abstraction of the human war, you learned the prime, happy numbers and numbers of Ulam. Our congratulations, the efforts of millions of imagined people were not in vain!
+                                              Instruction
+To play our game, you need to have the following knowledge:
+-A prime number (or a prime) is a natural number greater than 1 that cannot be formed by multiplying two smaller natural numbers.
+-A happy number is defined by the following process: Starting with any positive integer, replace the number by the sum of the squares of its digits in base-ten, and repeat the process until the number either equals 1 (where it will stay), or it loops endlessly in a cycle that does not include 1.
+-An Ulam number is a member of an integer sequence devised by and named after Stanislaw Ulam, who introduced it in 1964. The standard Ulam sequence (the (1, 2)-Ulam sequence) starts with U1 = 1 and U2 = 2. Then for n > 2, Un is defined to be the smallest integer that is the sum of two distinct earlier terms in exactly one way and larger than all earlier terms.
