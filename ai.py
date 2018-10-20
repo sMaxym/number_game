@@ -1,5 +1,6 @@
 import primeNumber
 import happyNumbers
+import ulamNumber
 
 
 def distance(origin, related):
@@ -24,7 +25,7 @@ def typesProfitEstimation(coordinates, radiuses, values):
     by its given coordinates, radiuses and values of the points.
     '''
 
-    def calcEstimation(primes, happies):
+    def calcEstimation(primes, happies, ulam):
         '''
         (integer, integer) -> number
         Return profitability estimation of a given point by
@@ -36,19 +37,23 @@ def typesProfitEstimation(coordinates, radiuses, values):
         >>> calcEstimation(0, 5)
         5.0
         '''
-        return ((primes + happies) ** 2 + (primes * happies) ** 2) ** 0.5
+        return ((primes + happies + ulam) ** 2 + (primes * \
+                    happies * ulam) ** 2) ** 0.5
 
     estimations = {}
     for origin in coordinates:
         counterPrime = 0
         counterHappy = 0
+        counterUlam = 0
         for point in coordinates:
             if distance(origin, point) <= radiuses[origin]:
                 if primeNumber.primeNumber(values[point]):
                     counterPrime += 1
                 if happyNumbers.happyNumbers(values[point]):
                     counterHappy += 1
-        estimation = calcEstimation(counterPrime, counterHappy)
+                if ulamNumber.ulamNumbers(values[point]):
+                    counterUlam += 1
+        estimation = calcEstimation(counterPrime, counterHappy, counterUlam)
         estimations[origin] = estimation
     return estimations
 
