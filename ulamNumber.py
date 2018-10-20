@@ -23,11 +23,10 @@ def ulamNumbers(number):
         if coefficient == 1:
             ulam.append(helpForUlam1)
         coefficient = 0
-    for overtaking in range(number):
-        if number in ulam:
-            return True
-        else:
-            return False
+    if number in ulam:
+        return True
+    else:
+        return False
 if __name__ == "__main__":
     # Loop for generation Ulam numbers         
     for num in range(100):
