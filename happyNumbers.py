@@ -29,7 +29,8 @@ def happyNumbers(number):
             return False 
         elif sumOfSquares >= 10:
             number = sumOfSquares
-# Loop for generation happy numbers                    
-for num in range(100):
-    if happyNumbers(num):
-        print(num, end = ", ")
+if __name__ == "__main__":
+    # Loop for generation happy numbers                    
+    for num in range(100):
+        if happyNumbers(num):
+            print(num, end = ", ")

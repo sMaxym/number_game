@@ -15,7 +15,8 @@ def primeNumber(number):
         if (number % factor) == 0:
             return False
     return True
-# Loop for generation prime numbers  
-for num in range(100):
-    if primeNumber(num):
-        print(num, end = ", ")
+if __name__ == "__main__":
+    # Loop for generation prime numbers  
+        for num in range(100):
+            if primeNumber(num):
+                print(num, end = ", ")
