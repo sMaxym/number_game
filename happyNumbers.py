@@ -17,12 +17,12 @@ def happyNumbers(number):
         sumOfSquares = 0 
         digits = []
         stNum = str(number)
-        for i in range(len(stNum)):
+        for indicator1 in range(len(stNum)):
             digit = number % 10
             number //= 10
             digits.append(digit)
-        for m in range(len(digits)):
-            sumOfSquares += digits[m]**2
+        for indicator2 in range(len(digits)):
+            sumOfSquares += digits[indicator2]**2
         if sumOfSquares == 1:
             return True
         elif  2 <= sumOfSquares <= 9:
