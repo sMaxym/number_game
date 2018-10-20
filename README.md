@@ -11,3 +11,10 @@ Not all people were able to leave the planet, and the war continues here. The tw
 Level 4:
 Mars, for decades, you wanted to colonize, fantasize, write books and film about it. And this day came. Those people did not come to you with peace, but with war. Japan and China will do everything to destroy each other on the red earth, the land of the god of war.
 Level 5:
+Jupiter also suffered human colonization. The struggle for such a considerable planet was reduced to the expansion of several craters. The battle between them is led by Britain and Argentina. The old reefs again tickled and only in cardinally different conditions.
+Level 6:
+Saturn, another giant planet on which the foot of humanity stepped in. And all that they run is just a thirst for self-destruction and thirst for wealth. Spain and India here to find out who is stronger and who will own Saturn.
+Level 7:
+Uranus, this is the final stop of people, further their technologies do not let fly. This object is the last planet that can be colonized. Bases are located, lids and equipment are ready. You started the capture of the craters!
+Epilogue:
+You did this, with the help of space and abstraction of the human war, you learned the prime, happy numbers and numbers of Ulam. Our congratulations, the efforts of millions of imagined people were not in vain!
