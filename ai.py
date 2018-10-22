@@ -1,23 +1,29 @@
 import estimations
 
+
 def distanceAvailability(origin, radius, points):
     '''
     (tuple, list, dictionary) -> boolean
-    Return True if origin is in range of at least 
+    Return True if origin is in range of at least
     one point of points list, otherwise False.
     '''
     for point in points:
         if radius >= estimations.distance(origin, point):
             return True
-        else: 
+        else:
             return False
+
 
 def associatedElements(associations, interface, elements):
     '''
     (dictionary, number, list) -> list
-    Return list of associated elements from a list "elements", 
+    Return list of associated elements from a list "elements",
     where each element associated with a number "interface".
-    >>> associatedElements({(1,1): 2, (0, 0): 3, (10, 5): -1, (1, -1): 2}, 2, [(1,1), (2,3), (3,3), (0, 0)])
+    >>> associatedElements({(1,1): 2,
+                            (0, 0): 3,
+                            (10, 5): -1,
+                            (1, -1): 2}, 2,
+                            [(1,1), (2,3), (3,3), (0, 0)])
     [(1, 1)]
     '''
     associatedElm = []
@@ -25,6 +31,7 @@ def associatedElements(associations, interface, elements):
         if associations.get(element) == interface:
             associatedElm.append(element)
     return associatedElm
+
 
 def hasAssociation(associations, element):
     '''
@@ -40,7 +47,8 @@ def hasAssociation(associations, element):
     else:
         return True
 
-def updateProfit(profit, diff, turn, playerIndex = 0, aiIndex = 1):
+
+def updateProfit(profit, diff, turn, playerIndex=0, aiIndex=1):
     '''
     (number, number, intger) -> number
     Return updated value of a profit based on the current turn.
@@ -55,10 +63,11 @@ def updateProfit(profit, diff, turn, playerIndex = 0, aiIndex = 1):
         profit += diff
     return round(profit, 10)
 
-def selectProper(data, turn, playerIndex = 0, aiIndex = 1):
+
+def selectProper(data, turn, playerIndex=0, aiIndex=1):
     '''
     (list, number) -> number
-    Return max element from "data" array if turn 
+    Return max element from "data" array if turn
     is player indexed, otherwise return min element.
     '''
     proper = None
@@ -67,6 +76,7 @@ def selectProper(data, turn, playerIndex = 0, aiIndex = 1):
     elif turn == aiIndex:
         proper = max(data)
     return data.index(proper)
+
 
 def listSubtraction(list, sublist):
     '''
@@ -85,10 +95,11 @@ def listSubtraction(list, sublist):
             res.append(item)
     return res
 
-def minimax(coordinates, radiuses, values, owner, level, currentLevel = 1, playerIndex = 0, aiIndex = 1):
+
+def minimax(coordinates, radiuses, values, owner, level, currentLevel=1, playerIndex=0, aiIndex=1):
     '''
     (list, dict, dict, dict, integer, integerm, integer, integer) -> tuple
-    Return the proper and the most relevant choose 
+    Return the proper and the most relevant choose
     for the player in the game to succeed.
     '''
     AI = aiIndex
@@ -106,7 +117,7 @@ def minimax(coordinates, radiuses, values, owner, level, currentLevel = 1, playe
         estimated = sum(estimated.values())
         estimated = updateProfit(0, estimated, abs(1 - TURN))
         return (estimated, None)
-        
+
     for node in coordinates:
         ownerPoints = associatedElements(owner, TURN, coordinates)
         if hasAssociation(owner, node):
@@ -129,7 +140,7 @@ def minimax(coordinates, radiuses, values, owner, level, currentLevel = 1, playe
         localProfit = localProfit[0]
         nodeCandidates.append(localProfit)
         candidatesToChoose.append(None)
-        index = selectProper(nodeCandidates, TURN)  
+        index = selectProper(nodeCandidates, TURN)
         properProfit = nodeCandidates[index]
         properNode = candidatesToChoose[index]
         return (localProfit, properNode)
@@ -141,17 +152,16 @@ def minimax(coordinates, radiuses, values, owner, level, currentLevel = 1, playe
         estimated = updateProfit(0, estimated, abs(1 - TURN))
         return (estimated, None)
 
-    index = selectProper(nodeCandidates, TURN) 
+    index = selectProper(nodeCandidates, TURN)
     properProfit = nodeCandidates[index]
     properNode = candidatesToChoose[index]
     return (properProfit, properNode)
+
 
 if __name__ == '__main__':
     a = [(2, 2), (5, 1), (5, 3), (3.1, 3.6), (3, 1), (7, 1)]
     b = {(2, 2): 2, (5, 1): 2, (5, 3): 2, (3.1, 3.6): 2, (3, 1): 2, (7, 1): 2}
     c = {(2, 2): 2, (5, 1): 5, (5, 3): 7, (3.1, 3.6): 8, (3, 1): 13, (7, 1): 11}
-    d = {(5, 3): 0, (2, 2): 1, (5 ,1): 0}
-    
+    d = {(5, 3): 0, (2, 2): 1, (5, 1): 0}
     res = minimax(a, b, c, d, 4)
     print(res)
-
