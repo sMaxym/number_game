@@ -1,4 +1,6 @@
 import pygame
+import time
+start_time = time.time()
 pygame.init()
 win = pygame.display.set_mode((1000, 550))
 pygame.display.set_caption("Space Settlements")
@@ -23,6 +25,18 @@ startPic = pygame.image.load("pictures/main/start.png")
 youWin = pygame.image.load("pictures/main/youWin.png")
 gameOver = pygame.image.load("pictures/main/gameOver.png")
 #-------Do not touch! Constants--------#
+
+
+#-----Texts-----#
+textMercury = pygame.image.load("pictures/Mercury/text.png")
+textVenus = pygame.image.load("pictures/Venus/text.png")
+textEarth = pygame.image.load("pictures/Earth/text.png")
+textMars = pygame.image.load("pictures/Mars/text.png")
+textJupiter = pygame.image.load("pictures/Jupiter/text.png")
+textSaturn = pygame.image.load("pictures/Saturn/text.png")
+textUranus = pygame.image.load("pictures/Uranus/text.png")
+#-----Texts-----#
+
 #-----Buttons-----#
 
 begin = pygame.transform.scale(pygame.image.load("pictures/main/begin.png"), (215, 100))
@@ -150,42 +164,61 @@ elif Uranus:
 
 #-------Variables for each level--------#
 
-
+if Mercury:
+    win.blit(textMercury, (0, 0))
+elif Venus:
+    win.blit(textVenus, (0, 0))
+    time.sleep(5)
+elif Earth:
+    win.blit(textEarth, (0, 0))
+    time.sleep(5)
+elif Mars:
+    win.blit(textMars, (0, 0))
+    time.sleep(5)
+elif Jupiter:
+    win.blit(textJupiter, (0, 0))
+    time.sleep(5)
+elif Saturn:
+    win.blit(textSaturn, (0, 0))
+    time.sleep(5)
+elif Uranus:
+    win.blit(textUranus, (0, 0))
+    time.sleep(5)
 
 #-----Game-----#
-
 while run:
-    pygame.time.delay(100)
-    drawWindow(backgr)
-    mouse = pygame.mouse.get_pos()
-    click = pygame.mouse.get_pressed()
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            run = False
+    if time.time() - start_time > 15:
+        pygame.time.delay(100)
+        drawWindow(backgr)
+        mouse = pygame.mouse.get_pos()
+        click = pygame.mouse.get_pressed()
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                run = False
 
-    for item in range(len(mainList)):
-        win.blit(mainList[item][1], mainList[item][0])
+        for item in range(len(mainList)):
+            win.blit(mainList[item][1], mainList[item][0])
 
-    for element in mainList:
-        if element[2].collidepoint(mouse):
-            pygame.draw.circle(win, (11, 142, 0), (element[0][0] + zoneRadX, element[0][1] + zoneRadY), radius, 4)
-            win.blit(element[1], (element[0][0], element[0][1]))
-            element[2].x = element[0][0]
-            element[2].y = element[0][1]
-            if click[0] == 1:
-                element[1] = element[3]
-                element[5] = True
-        else:
-            win.blit(element[1], (element[0][0], element[0][1]))
-            element[2].x = element[0][0]
-            element[2].y = element[0][1]
-        if element[5]:
-            pygame.draw.circle(win, (11, 142, 0), (element[0][0] + zoneRadX, element[0][1] + zoneRadY), radius, 4)
-        smallText = pygame.font.Font("freesansbold.ttf", 15)
-        textSurf, textRect = text_objects(str(element[4]), smallText)
-        textRect.center = element[0]
-        win.blit(textSurf, textRect)
-    
+        for element in mainList:
+            if element[2].collidepoint(mouse):
+                pygame.draw.circle(win, (11, 142, 0), (element[0][0] + zoneRadX, element[0][1] + zoneRadY), radius, 4)
+                win.blit(element[1], (element[0][0], element[0][1]))
+                element[2].x = element[0][0]
+                element[2].y = element[0][1]
+                if click[0] == 1:
+                    element[1] = element[3]
+                    element[5] = True
+            else:
+                win.blit(element[1], (element[0][0], element[0][1]))
+                element[2].x = element[0][0]
+                element[2].y = element[0][1]
+            if element[5]:
+                pygame.draw.circle(win, (11, 142, 0), (element[0][0] + zoneRadX, element[0][1] + zoneRadY), radius, 4)
+            smallText = pygame.font.Font("freesansbold.ttf", 15)
+            textSurf, textRect = text_objects(str(element[4]), smallText)
+            textRect.center = element[0]
+            win.blit(textSurf, textRect)
+        
     pygame.display.update()
 pygame.quit()
 
