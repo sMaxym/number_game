@@ -96,6 +96,17 @@ def listSubtraction(list, sublist):
     return res
 
 
+def generateFirstStep(coordinates, radiuses, values, chosen):
+    '''
+    (list, dict, dict, tuple) -> tuple
+    Return the first relevant step for the game.
+    '''
+    estimationCoords = listSubtraction(coordinates, [chosen])
+    estimated = estimations.typesProfitEstimation(estimationCoords, radiuses, values)
+    step = max(zip(estimated.values(), estimated.keys()))
+    return step
+
+
 def minimax(coordinates, radiuses, values, owner, level, currentLevel=1, playerIndex=0, aiIndex=1):
     '''
     (list, dict, dict, dict, integer, integerm, integer, integer) -> tuple
@@ -162,6 +173,6 @@ if __name__ == '__main__':
     a = [(2, 2), (5, 1), (5, 3), (3.1, 3.6), (3, 1), (7, 1)]
     b = {(2, 2): 2, (5, 1): 2, (5, 3): 2, (3.1, 3.6): 2, (3, 1): 2, (7, 1): 2}
     c = {(2, 2): 2, (5, 1): 5, (5, 3): 7, (3.1, 3.6): 8, (3, 1): 13, (7, 1): 11}
-    d = {(5, 3): 0, (2, 2): 1, (5, 1): 0}
-    res = minimax(a, b, c, d, 4)
+    d = {(5, 3): 0}
+    res = generateFirstStep(a,b,c,(5, 3))
     print(res)
