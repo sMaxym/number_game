@@ -16,9 +16,11 @@ def action(level, score):
 
     xForEach = [200, 220, 350, 370, 380]
     yForEach = [80, 220, 70, 250, 400]
-    craterDigit = ["13", "7", "9", "12", "5"]
+    craterDigit = ["13", "5", "8", "1", "7"]
     
-    what = ["prime", "", ]
+    what = ["prime", "prime", "ulam", "ulam", "happy"]
+
+    
 
     craters = []
     isClicked = []

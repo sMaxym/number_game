@@ -66,8 +66,8 @@ def selectProper(data, turn, playerIndex = 0, aiIndex = 1):
         proper = min(data)
     elif turn == aiIndex:
         proper = max(data)
-    return proper
-import doctest
+    return data.index(proper)
+
 def listSubtraction(list, sublist):
     '''
     (list, list) -> list
@@ -84,15 +84,18 @@ def listSubtraction(list, sublist):
         if toAdd:
             res.append(item)
     return res
-doctest.testmod()
+
 def minimax(coordinates, radiuses, values, owner, level, currentLevel = 1, playerIndex = 0, aiIndex = 1):
     '''
-    todo: documentation
+    (list, dict, dict, dict, integer, integerm, integer, integer) -> tuple
+    Return the proper and the most relevant choose 
+    for the player in the game to succeed.
     '''
     AI = aiIndex
     PLAYER = playerIndex
     TURN = PLAYER if currentLevel % 2 == 0 else AI
     nodeCandidates = []
+    candidatesToChoose = []
     distanceSkip = 0
     isFinal = True
 
@@ -100,7 +103,9 @@ def minimax(coordinates, radiuses, values, owner, level, currentLevel = 1, playe
         enemyCoords = associatedElements(owner, TURN, coordinates)
         estimationCoords = listSubtraction(coordinates, enemyCoords)
         estimated = estimations.typesProfitEstimation(estimationCoords, radiuses, values)
-        return estimated
+        estimated = sum(estimated.values())
+        estimated = updateProfit(0, estimated, abs(1 - TURN))
+        return (estimated, None)
         
     for node in coordinates:
         ownerPoints = associatedElements(owner, TURN, coordinates)
@@ -114,46 +119,39 @@ def minimax(coordinates, radiuses, values, owner, level, currentLevel = 1, playe
         currentOwner = owner.copy()
         currentOwner[node] = TURN
         localProfit = minimax(coordinates, radiuses, values, currentOwner, level, currentLevel + 1)
-        if isinstance(localProfit, dict):
-            localProfit = localProfit[node]
-        profit = updateProfit(profit, localProfit, TURN)
-        nodeCandidates.append(profit)
+        localProfit = localProfit[0]
+        nodeCandidates.append(localProfit)
+        candidatesToChoose.append(node)
+
     if distanceSkip:
-        #TODO: redo with DRY
         profit = 0
         localProfit = minimax(coordinates, radiuses, values, owner, level, currentLevel + 1)
-        if isinstance(localProfit, dict):
-            localProfit = localProfit[node]
-        profit = updateProfit(profit, localProfit, TURN)
-        nodeCandidates.append(profit)
-        properProfit = selectProper(nodeCandidates, TURN)  
-        return localProfit
+        localProfit = localProfit[0]
+        nodeCandidates.append(localProfit)
+        candidatesToChoose.append(None)
+        index = selectProper(nodeCandidates, TURN)  
+        properProfit = nodeCandidates[index]
+        properNode = candidatesToChoose[index]
+        return (localProfit, properNode)
     elif isFinal:
         enemyCoords = associatedElements(owner, TURN, coordinates)
         estimationCoords = listSubtraction(coordinates, enemyCoords)
         estimated = estimations.typesProfitEstimation(estimationCoords, radiuses, values)
-        return estimated
+        estimated = sum(estimated.values())
+        estimated = updateProfit(0, estimated, abs(1 - TURN))
+        return (estimated, None)
 
-    properProfit = selectProper(nodeCandidates, TURN)    
-    return properProfit
-
-    # TODO: Check if there any non owned nodes
-    # if isFinal:
-    #     estimated = estimations.typesProfitEstimation(coordinates, radiuses, values)
-    #     return estimated
+    index = selectProper(nodeCandidates, TURN) 
+    properProfit = nodeCandidates[index]
+    properNode = candidatesToChoose[index]
+    return (properProfit, properNode)
 
 if __name__ == '__main__':
-    a = [(2, 2), (5, 1), (5, 3), (3.1, 3.6), (3, 1)]
-    b = {(2, 2): 2, (5, 1): 2, (5, 3): 2, (3.1, 3.6): 2, (3, 1): 2}
-    c = {(2, 2): 2, (5, 1): 5, (5, 3): 7, (3.1, 3.6): 8, (3, 1): 13}
-    d = {(2, 2): 0, (5, 1): 1}
-    # res = estimations.typesProfitEstimation(a, b, c)
-    # print('\n' + '#' * 30)
-    # for i in res:
-    #     print(c[i], i, res[i])
-    # print('#' * 30)
+    a = [(2, 2), (5, 1), (5, 3), (3.1, 3.6), (3, 1), (7, 1)]
+    b = {(2, 2): 2, (5, 1): 2, (5, 3): 2, (3.1, 3.6): 2, (3, 1): 2, (7, 1): 2}
+    c = {(2, 2): 2, (5, 1): 5, (5, 3): 7, (3.1, 3.6): 8, (3, 1): 13, (7, 1): 11}
+    d = {(5, 3): 0, (2, 2): 1, (5 ,1): 0}
     
     res = minimax(a, b, c, d, 4)
     print(res)
-    # # print(associatedElements({(1,1): 2, (0, 0): 3, (10, 5): -1, (1, -1): 2}, 2, [(1,1), (2,3), (3,3), (0, 0)]))
 
