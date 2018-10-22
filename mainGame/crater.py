@@ -30,6 +30,7 @@ class Crater():
             array.append(False)
         else:
             pygame.draw.circle(win, self.color0, (self.xBut, self.yBut), self.radius1)
+            array.append(False)
         
         smallText = pygame.font.Font("freesansbold.ttf", 15)
         textSurf, textRect = text_objects(self.msg, smallText)
