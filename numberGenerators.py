@@ -5,6 +5,10 @@ import random
 
 
 def generateRandomUlam(amount, numberTo, numberFrom = 1):
+    '''
+    (int,int,int) -> lisr
+    Return list with random Ulam numbers
+    '''
     randomIndexes = []
     randomUlams = []
     ulams = []
@@ -20,6 +24,10 @@ def generateRandomUlam(amount, numberTo, numberFrom = 1):
 
 
 def generateRandomHappy(amount, numberTo, numberFrom = 1):
+    '''
+    (int,int,int) -> lisr
+    Return list with random happy numbers
+    '''
     randomIndexes = []
     randomHappy = []
     happies = []
@@ -35,6 +43,10 @@ def generateRandomHappy(amount, numberTo, numberFrom = 1):
 
 
 def generateRandomPrime(amount, numberTo, numberFrom = 1):
+    '''
+    (int,int,int) -> lisr
+    Return list with random prime numbers
+    '''
     randomIndexes = []
     randomPrimes = []
     primes = []
