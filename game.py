@@ -23,6 +23,8 @@ run = False
 gameOver = False
 
 AI, PLAYER = 1, 0 
+friendlyColor = (11, 142, 0)
+enemyColor = (250, 0, 0)
 
 #--------Do not touch! Constants-------#
 width = 80
@@ -188,26 +190,20 @@ if Mercury:
     win.blit(textMercury, (0, 0))
 elif Venus:
     win.blit(textVenus, (0, 0))
-    time.sleep(5)
 elif Earth:
     win.blit(textEarth, (0, 0))
-    time.sleep(5)
 elif Mars:
     win.blit(textMars, (0, 0))
-    time.sleep(5)
 elif Jupiter:
     win.blit(textJupiter, (0, 0))
-    time.sleep(5)
 elif Saturn:
     win.blit(textSaturn, (0, 0))
-    time.sleep(5)
 elif Uranus:
     win.blit(textUranus, (0, 0))
-    time.sleep(5)
 
 #-----Game-----#
 while run:
-    if time.time() - start_time > 0.6:
+    if time.time() - start_time > 1:
         pygame.time.delay(100)
         drawWindow(backgr)
         mouse = pygame.mouse.get_pos()
@@ -221,7 +217,7 @@ while run:
 
         for element in mainList:
             if element[2].collidepoint(mouse):
-                pygame.draw.circle(win, (11, 142, 0), (element[0][0] + zoneRadX, element[0][1] + zoneRadY), radius, 4)
+                pygame.draw.circle(win, friendlyColor, (element[0][0] + zoneRadX, element[0][1] + zoneRadY), radius, 4)
                 win.blit(element[1], (element[0][0], element[0][1]))
                 element[2].x = element[0][0]
                 element[2].y = element[0][1]
@@ -239,7 +235,12 @@ while run:
                 element[2].x = element[0][0]
                 element[2].y = element[0][1]
             if element[5]:
-                pygame.draw.circle(win, (11, 142, 0), (element[0][0] + zoneRadX, element[0][1] + zoneRadY), radius, 4)
+                curColor = None
+                if mercuryOwner[element[0]] == PLAYER:
+                    curColor = friendlyColor
+                elif mercuryOwner[element[0]] == AI:
+                    curColor = enemyColor
+                pygame.draw.circle(win, curColor, (element[0][0] + zoneRadX, element[0][1] + zoneRadY), radius, 4)
             smallText = pygame.font.Font("freesansbold.ttf", 15)
             textSurf, textRect = text_objects(str(element[4]), smallText)
             textRect.center = element[0]
@@ -250,6 +251,7 @@ while run:
             if currentIter != 2:
                 aiTurn = ai.minimax(mercuryCoords, mercuryRadiuses, mercuryValues, mercuryOwner, 5)
                 aiTurn = aiTurn[1]
+                mercuryOwner[aiTurn] = AI
             else:
                 aiTurn = ai.generateFirstStep(mercuryCoords, mercuryRadiuses, mercuryValues, firstPlayerCoord)
                 aiTurn = aiTurn[1]
@@ -259,6 +261,7 @@ while run:
                     element[1] = element[3]
                     element[5] = True
             currentTurn = PLAYER 
+    print(mercuryOwner)
     pygame.display.update()
 pygame.quit()
 
