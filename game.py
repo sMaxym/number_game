@@ -35,6 +35,9 @@ zoneRadY = int(height / 2)
 startPic = pygame.image.load("pictures/main/start.png")
 youWin = pygame.image.load("pictures/main/youWin.png")
 gameOver = pygame.image.load("pictures/main/gameOver.png")
+score = pygame.transform.scale(pygame.image.load("pictures/main/score.png"), (150, 95))
+happyFont = pygame.font.Font("pictures/main/ravie.ttf", 20)
+smallText = pygame.font.Font("freesansbold.ttf", 15)
 #-------Do not touch! Constants--------#
 
 
@@ -56,6 +59,7 @@ beginOver = pygame.transform.scale(pygame.image.load("pictures/main/beginOver.pn
 beginClicked = pygame.transform.scale(pygame.image.load("pictures/main/beginClicked.png"), (215, 100))
 
 #-----Buttons-----#
+
 #-------Functions--------#
 
 def createCraters(picLoc, list, picLocCol, values, width, height, radius):
@@ -71,10 +75,21 @@ def drawWindow(background):
     win.blit((pygame.image.load(background)), (0, 0))
     pygame.display.update()
 
-def text_objects(text, font):
-    textSurface = font.render(text, True, (0, 0, 0))
+def text_objects(text, font, color):
+    textSurface = font.render(text, True, color)
     return textSurface, textSurface.get_rect()
 
+def typeOfNum(num):
+    if num == 0:
+        text = "ulam"
+    if num == 1:
+        text = "prime"
+    if num == 2:
+        text = "happy"
+    firtext, sectext = text_objects(text, happyFont, (0,0,0))
+    sectext.center = (930, 100)
+    win.blit(firtext, sectext)
+    
 #-------Functions--------#
 
 #-----Start-----#
@@ -106,6 +121,17 @@ while start:
 
 #-----Start-----#
 
+
+#-----Score-----#
+
+myScore = 5
+botScore = 100
+textScore1 = "Score"
+whichNum = "prime"
+textCordX = [950, 920, 930]
+textCordY = [40, 60, 80]
+#-----Score-----#
+
 #-------Variables for each level--------#
 
 currentTurn = PLAYER
@@ -136,7 +162,7 @@ elif Venus:
     craterLocCol = "pictures/Venus/craterColonised.png"
     backgr = "pictures/Venus/bg1.png"
     mainList = createCraters(craterLoc, \
-     ((200, 200),(500, 100), (500, 300), (310, 360), (300, 100)), \
+     ((168, 450),(294, 225), (340, 455), (462, 280), (462, 185), (620, 200)), \
       craterLocCol, craterValue, width, height, radius)
 elif Earth:
     craterValue = [2, 5, 7, 8, 13]
@@ -212,6 +238,14 @@ while run:
             if event.type == pygame.QUIT:
                 run = False
 
+        textScore = ["Score", "You:" + str(myScore), "Bot:" + str(botScore)]
+        for diftext in range(3):
+            firtext, sectext = text_objects(textScore[diftext], happyFont, (0,0,0))
+            sectext.center = (textCordX[diftext], textCordY[diftext])
+            win.blit(firtext, sectext)
+
+        typeOfNum(1)
+
         for item in range(len(mainList)):
             win.blit(mainList[item][1], mainList[item][0])
 
@@ -241,8 +275,7 @@ while run:
                 elif mercuryOwner[element[0]] == AI:
                     curColor = enemyColor
                 pygame.draw.circle(win, curColor, (element[0][0] + zoneRadX, element[0][1] + zoneRadY), radius, 4)
-            smallText = pygame.font.Font("freesansbold.ttf", 15)
-            textSurf, textRect = text_objects(str(element[4]), smallText)
+            textSurf, textRect = text_objects(str(element[4]), smallText, (0,0,0))
             textRect.center = element[0]
             win.blit(textSurf, textRect)
 
