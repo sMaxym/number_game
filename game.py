@@ -5,6 +5,8 @@ import primeNumber
 import ulamNumber
 import estimations
 import ai
+import random
+import numberGenerators
 
 
 start_time = time.time()
@@ -23,6 +25,7 @@ run = False
 gameOver = False
 
 AI, PLAYER = 1, 0 
+CONDITION_ULAM, CONDITION_PRIME, CONDITION_HAPPY = 0, 1, 2
 friendlyColor = (11, 142, 0)
 enemyColor = (250, 0, 0)
 
@@ -75,6 +78,12 @@ def text_objects(text, font):
     textSurface = font.render(text, True, (0, 0, 0))
     return textSurface, textSurface.get_rect()
 
+def generateCondition(ulam = 0, prime = 1, happy = 2):
+    condMin = min([ulam, prime, happy])
+    condMax = max([ulam, prime, happy])
+    chooseCond = random.randint(condMin, condMax)
+    return chooseCond
+
 #-------Functions--------#
 
 #-----Start-----#
@@ -109,9 +118,15 @@ while start:
 #-------Variables for each level--------#
 
 currentTurn = PLAYER
+currentCondition = generateCondition()
 firstPlayerCoord = None
+playerStartTime = None
 currentIter = 1
-mercuryCraterValue = [2, 5, 7, 8, 13]
+playerIter = 1
+mercuryCraterValue = []
+mercuryCraterValue.extend(numberGenerators.generateRandomPrime(2, 100))
+mercuryCraterValue.extend(numberGenerators.generateRandomUlam(2, 100))
+mercuryCraterValue.extend(numberGenerators.generateRandomHappy(1, 100))
 mercuryCoords = [(200, 200),(500, 100), (500, 300), (310, 360), (300, 100)]
 mercuryRadiuses = {}
 mercuryValues = {}
@@ -119,7 +134,6 @@ mercuryOwner = {}
 for index in range(0, len(mercuryCoords)):
     mercuryRadiuses[mercuryCoords[index]] = radius
     mercuryValues[mercuryCoords[index]] = mercuryCraterValue[index]
-
 
 if Mercury:
     zoneColor = (11, 142, 0)
@@ -202,8 +216,10 @@ elif Uranus:
     win.blit(textUranus, (0, 0))
 
 #-----Game-----#
+playerStartTime = time.time()
 while run:
-    if time.time() - start_time > 1:
+    print(currentCondition, mercuryOwner)
+    if time.time() - start_time > 5:
         pygame.time.delay(100)
         drawWindow(backgr)
         mouse = pygame.mouse.get_pos()
@@ -211,6 +227,11 @@ while run:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 run = False
+
+        if time.time() - playerStartTime > 5:
+            playerStartTime = time.time()
+            currentIter += 1
+            currentTurn = AI if currentTurn == PLAYER else PLAYER
 
         for item in range(len(mainList)):
             win.blit(mainList[item][1], mainList[item][0])
@@ -222,7 +243,15 @@ while run:
                 element[2].x = element[0][0]
                 element[2].y = element[0][1]
                 if click[0] == 1:
-                    if not element[5] and currentTurn == PLAYER:
+                    playerPoints = ai.associatedElements(mercuryOwner, PLAYER, mercuryCoords)
+                    chosenNumberProps = []
+                    if ulamNumber.ulamNumbers(mercuryValues[element[0]]):
+                        chosenNumberProps.append(CONDITION_ULAM)
+                    if primeNumber.primeNumber(mercuryValues[element[0]]):
+                        chosenNumberProps.append(CONDITION_PRIME)
+                    if happyNumbers.happyNumbers(mercuryValues[element[0]]):
+                        chosenNumberProps.append(CONDITION_HAPPY)
+                    if not element[5] and currentTurn == PLAYER and (playerIter == 1 or ai.distanceAvailability(element[0], mercuryRadiuses[element[0]], playerPoints)) and currentCondition in chosenNumberProps:
                         if currentIter == 1:
                             firstPlayerCoord = element[0]
                         element[1] = element[3]
@@ -230,6 +259,8 @@ while run:
                         mercuryOwner[element[0]] = PLAYER
                         currentTurn = AI
                         currentIter += 1
+                        playerIter += 1
+                        playerStartTime = time.time()
             else:
                 win.blit(element[1], (element[0][0], element[0][1]))
                 element[2].x = element[0][0]
@@ -248,20 +279,40 @@ while run:
 
         if currentTurn == AI:
             aiTurn = None
+            aiCoordsToChoose = []
+            for coord in mercuryCoords:
+                chosenNumberProps = []
+                if ulamNumber.ulamNumbers(mercuryValues[coord]):
+                    chosenNumberProps.append(CONDITION_ULAM)
+                if primeNumber.primeNumber(mercuryValues[coord]):
+                    chosenNumberProps.append(CONDITION_PRIME)
+                if happyNumbers.happyNumbers(mercuryValues[coord]):
+                    chosenNumberProps.append(CONDITION_HAPPY)
+                if currentCondition in chosenNumberProps:
+                    aiCoordsToChoose.append(coord)
             if currentIter != 2:
-                aiTurn = ai.minimax(mercuryCoords, mercuryRadiuses, mercuryValues, mercuryOwner, 5)
+                aiTurn = ai.minimax(aiCoordsToChoose, mercuryRadiuses, mercuryValues, mercuryOwner, 5)
                 aiTurn = aiTurn[1]
                 mercuryOwner[aiTurn] = AI
+                currentCondition = generateCondition()
+                
+                currentTurn = PLAYER
+                playerStartTime = time.time()
             else:
-                aiTurn = ai.generateFirstStep(mercuryCoords, mercuryRadiuses, mercuryValues, firstPlayerCoord)
+                aiTurn = ai.generateFirstStep(aiCoordsToChoose, mercuryRadiuses, mercuryValues, firstPlayerCoord)
                 aiTurn = aiTurn[1]
                 mercuryOwner[aiTurn] = AI
+                currentCondition = generateCondition()
+
+                currentTurn = PLAYER
+                playerStartTime = time.time()
             for element in mainList:
                 if element[0] == aiTurn:
                     element[1] = element[3]
                     element[5] = True
-            currentTurn = PLAYER 
-    print(mercuryOwner)
+             
+    else:
+        playerStartTime = time.time()
     pygame.display.update()
 pygame.quit()
 
