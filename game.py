@@ -137,7 +137,7 @@ while start:
 myScore = 0
 botScore = 0
 textScore1 = "Score"
-textCordX = [950, 920, 930, 920]
+textCordX = [950, 920, 930, 910]
 textCordY = [40, 60, 80, 120]
 #-----Score-----#
 
@@ -250,7 +250,7 @@ for planet in range(7):
     start_time = time.time()
     emptySpot = None
     while run:
-        if time.time() - start_time > 1:
+        if time.time() - start_time > 15:
             pygame.time.delay(100)
             drawWindow(backgr)
             mouse = pygame.mouse.get_pos()
@@ -266,7 +266,7 @@ for planet in range(7):
                 currentIter += 1
                 currentTurn = AI if currentTurn == PLAYER else PLAYER
             
-            textScore = ["Score", "You:" + str(myScore), "Bot:" + str(botScore), str(round(5 - (time.time() - playerStartTime)))]
+            textScore = ["Score", "You:" + str(myScore), "Bot:" + str(botScore), "Time:" + str(round(5 - (time.time() - playerStartTime)))]
             for diftext in range(4):
                 firtext, sectext = text_objects(textScore[diftext], happyFont, (0,0,0))
                 sectext.center = (textCordX[diftext], textCordY[diftext])
