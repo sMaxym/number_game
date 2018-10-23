@@ -10,8 +10,7 @@ def distanceAvailability(origin, radius, points):
     for point in points:
         if radius >= estimations.distance(origin, point):
             return True
-        else:
-            return False
+    return False
 
 
 def associatedElements(associations, interface, elements):
