@@ -28,6 +28,7 @@ AI, PLAYER = 1, 0
 CONDITION_ULAM, CONDITION_PRIME, CONDITION_HAPPY = 0, 1, 2
 friendlyColor = (11, 142, 0)
 enemyColor = (250, 0, 0)
+introTime = 1
 
 #--------Do not touch! Constants-------#
 width = 80
@@ -250,7 +251,7 @@ for planet in range(7):
     start_time = time.time()
     emptySpot = None
     while run:
-        if time.time() - start_time > 15:
+        if time.time() - start_time > introTime:
             pygame.time.delay(100)
             drawWindow(backgr)
             mouse = pygame.mouse.get_pos()
@@ -287,7 +288,6 @@ for planet in range(7):
                     element[2].x = element[0][0]
                     element[2].y = element[0][1]
                     if click[0] == 1:
-                        print("OK")
                         playerPoints = ai.associatedElements(planetOwner, PLAYER, planetCoords)
                         chosenNumberProps = []
                         if ulamNumber.ulamNumbers(planetValues[element[0]]):
@@ -339,15 +339,31 @@ for planet in range(7):
                     if currentCondition in chosenNumberProps:
                         aiCoordsToChoose.append(coord)
                 if currentIter != 2:
-                    aiTurn = ai.minimax(aiCoordsToChoose, planetRadiuses, planetValues, planetOwner, 5)
-                    aiTurn = aiTurn[1]
+                    aiTurn = ai.minimax(planetCoords, planetRadiuses, planetValues, planetOwner, 5)
+                    print(aiTurn)
+                    # aiTurn = aiTurn[1]
+
+                    while True:
+                        if len(aiTurn[0]) == 0:
+                            aiTurn = None
+                            break
+                        index = ai.selectProper(aiTurn[0], AI)
+                        properProfit = aiTurn[0][index]
+                        properNode = aiTurn[1][index]
+                        if properNode in aiCoordsToChoose:
+                            if properNode is not None or len(aiTurn[0]):
+                                aiTurn = properNode
+                                break 
+                        del aiTurn[0][index]
+                        del aiTurn[1][index]
+
                     planetOwner[aiTurn] = AI
                     currentCondition = generateCondition()
                     botScore += 5
                     currentTurn = PLAYER
                     playerStartTime = time.time()
                 else:
-                    aiTurn = ai.generateFirstStep(aiCoordsToChoose, planetRadiuses, planetValues, firstPlayerCoord)
+                    aiTurn = ai.generateFirstStep(planetCoords, planetRadiuses, planetValues, firstPlayerCoord)
                     aiTurn = aiTurn[1]
                     planetOwner[aiTurn] = AI
                     currentCondition = generateCondition()

@@ -126,7 +126,7 @@ def minimax(coordinates, radiuses, values, owner, level, currentLevel=1, playerI
         estimated = estimations.typesProfitEstimation(estimationCoords, radiuses, values)
         estimated = sum(estimated.values())
         estimated = updateProfit(0, estimated, abs(1 - TURN))
-        return (estimated, None)
+        return ([estimated], [None])
 
     for node in coordinates:
         ownerPoints = associatedElements(owner, TURN, coordinates)
@@ -139,33 +139,49 @@ def minimax(coordinates, radiuses, values, owner, level, currentLevel=1, playerI
         profit = 0
         currentOwner = owner.copy()
         currentOwner[node] = TURN
-        localProfit = minimax(coordinates, radiuses, values, currentOwner, level, currentLevel + 1)
-        localProfit = localProfit[0]
+        # localProfit = minimax(coordinates, radiuses, values, currentOwner, level, currentLevel + 1)
+        # localProfit = localProfit[0]
+
+        minimaxData = minimax(coordinates, radiuses, values, owner, level, currentLevel + 1)
+        index = selectProper(minimaxData[0], TURN)
+        properProfit = minimaxData[0][index]
+        properNode = minimaxData[1][index]
+        localProfit = properProfit
+
         nodeCandidates.append(localProfit)
         candidatesToChoose.append(node)
 
     if distanceSkip:
         profit = 0
-        localProfit = minimax(coordinates, radiuses, values, owner, level, currentLevel + 1)
-        localProfit = localProfit[0]
+        # localProfit = minimax(coordinates, radiuses, values, owner, level, currentLevel + 1)
+
+        minimaxData = minimax(coordinates, radiuses, values, owner, level, currentLevel + 1)
+        index = selectProper(minimaxData[0], TURN)
+        properProfit = minimaxData[0][index]
+        properNode = minimaxData[1][index]
+        localProfit = properProfit
+
+        # localProfit = localProfit[0]
         nodeCandidates.append(localProfit)
         candidatesToChoose.append(None)
-        index = selectProper(nodeCandidates, TURN)
-        properProfit = nodeCandidates[index]
-        properNode = candidatesToChoose[index]
-        return (localProfit, properNode)
+        # index = selectProper(nodeCandidates, TURN)
+        # properProfit = nodeCandidates[index]
+        # properNode = candidatesToChoose[index]
+        # return (properProfit, properNode)
+        return (nodeCandidates, candidatesToChoose)
     elif isFinal:
         enemyCoords = associatedElements(owner, TURN, coordinates)
         estimationCoords = listSubtraction(coordinates, enemyCoords)
         estimated = estimations.typesProfitEstimation(estimationCoords, radiuses, values)
         estimated = sum(estimated.values())
         estimated = updateProfit(0, estimated, abs(1 - TURN))
-        return (estimated, None)
+        return ([estimated], [None])
 
-    index = selectProper(nodeCandidates, TURN)
-    properProfit = nodeCandidates[index]
-    properNode = candidatesToChoose[index]
-    return (properProfit, properNode)
+    # index = selectProper(nodeCandidates, TURN)
+    # properProfit = nodeCandidates[index]
+    # properNode = candidatesToChoose[index]
+    # return (properProfit, properNode)
+    return (nodeCandidates, candidatesToChoose)
 
 
 if __name__ == '__main__':
