@@ -129,6 +129,7 @@ def minimax(coordinates, radiuses, values, owner, level, currentLevel=1, playerI
         return ([estimated], [None])
 
     for node in coordinates:
+        print("GO")
         ownerPoints = associatedElements(owner, TURN, coordinates)
         if hasAssociation(owner, node):
             continue
@@ -159,10 +160,9 @@ def minimax(coordinates, radiuses, values, owner, level, currentLevel=1, playerI
         index = selectProper(minimaxData[0], TURN)
         properProfit = minimaxData[0][index]
         properNode = minimaxData[1][index]
-        localProfit = properProfit
 
         # localProfit = localProfit[0]
-        nodeCandidates.append(localProfit)
+        nodeCandidates.append(properProfit)
         candidatesToChoose.append(None)
         # index = selectProper(nodeCandidates, TURN)
         # properProfit = nodeCandidates[index]

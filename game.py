@@ -339,8 +339,9 @@ for planet in range(7):
                     if currentCondition in chosenNumberProps:
                         aiCoordsToChoose.append(coord)
                 if currentIter != 2:
-                    aiTurn = ai.minimax(planetCoords, planetRadiuses, planetValues, planetOwner, 5)
-                    print(aiTurn)
+                    a = time.time()
+                    aiTurn = ai.minimax(planetCoords, planetRadiuses, planetValues, planetOwner, 1)
+                    print(time.time() - a)
                     # aiTurn = aiTurn[1]
 
                     while True:
