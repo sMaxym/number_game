@@ -1,5 +1,12 @@
 import pygame
 import time
+import happyNumbers
+import primeNumber
+import ulamNumber
+import estimations
+import ai
+
+
 start_time = time.time()
 pygame.init()
 win = pygame.display.set_mode((1000, 550))
@@ -14,6 +21,8 @@ Saturn = False
 Uranus = False
 run = False
 gameOver = False
+
+AI, PLAYER = 1, 0 
 
 #--------Do not touch! Constants-------#
 width = 80
@@ -97,16 +106,27 @@ while start:
 
 #-------Variables for each level--------#
 
+currentTurn = PLAYER
+firstPlayerCoord = None
+currentIter = 1
+mercuryCraterValue = [2, 5, 7, 8, 13]
+mercuryCoords = [(200, 200),(500, 100), (500, 300), (310, 360), (300, 100)]
+mercuryRadiuses = {}
+mercuryValues = {}
+mercuryOwner = {}
+for index in range(0, len(mercuryCoords)):
+    mercuryRadiuses[mercuryCoords[index]] = radius
+    mercuryValues[mercuryCoords[index]] = mercuryCraterValue[index]
+
 
 if Mercury:
-    craterValue = [2, 5, 7, 8, 13]
     zoneColor = (11, 142, 0)
     craterLoc = "pictures/Mercury/crater.png"
     craterLocCol = "pictures/Mercury/craterColonised.png"
     backgr = "pictures/Mercury/bg1.png"
     mainList = createCraters(craterLoc, \
-     ((200, 200),(500, 100), (500, 300), (310, 360), (300, 100)), \
-      craterLocCol, craterValue, width, height, radius)
+     mercuryCoords, \
+      craterLocCol, mercuryCraterValue, width, height, radius)
 elif Venus:
     craterValue = [2, 5, 7, 8, 13]
     zoneColor = (11, 142, 0)
@@ -187,7 +207,7 @@ elif Uranus:
 
 #-----Game-----#
 while run:
-    if time.time() - start_time > 15:
+    if time.time() - start_time > 0.6:
         pygame.time.delay(100)
         drawWindow(backgr)
         mouse = pygame.mouse.get_pos()
@@ -206,8 +226,14 @@ while run:
                 element[2].x = element[0][0]
                 element[2].y = element[0][1]
                 if click[0] == 1:
-                    element[1] = element[3]
-                    element[5] = True
+                    if not element[5] and currentTurn == PLAYER:
+                        if currentIter == 1:
+                            firstPlayerCoord = element[0]
+                        element[1] = element[3]
+                        element[5] = True
+                        mercuryOwner[element[0]] = PLAYER
+                        currentTurn = AI
+                        currentIter += 1
             else:
                 win.blit(element[1], (element[0][0], element[0][1]))
                 element[2].x = element[0][0]
@@ -218,7 +244,21 @@ while run:
             textSurf, textRect = text_objects(str(element[4]), smallText)
             textRect.center = element[0]
             win.blit(textSurf, textRect)
-        
+
+        if currentTurn == AI:
+            aiTurn = None
+            if currentIter != 2:
+                aiTurn = ai.minimax(mercuryCoords, mercuryRadiuses, mercuryValues, mercuryOwner, 5)
+                aiTurn = aiTurn[1]
+            else:
+                aiTurn = ai.generateFirstStep(mercuryCoords, mercuryRadiuses, mercuryValues, firstPlayerCoord)
+                aiTurn = aiTurn[1]
+                mercuryOwner[aiTurn] = AI
+            for element in mainList:
+                if element[0] == aiTurn:
+                    element[1] = element[3]
+                    element[5] = True
+            currentTurn = PLAYER 
     pygame.display.update()
 pygame.quit()
 
